@@ -4,7 +4,7 @@ $(foreach file,$(wildcard $(1)/*),$(if $(wildcard $(file)/*),$(call All_Files_In
 endef
 # end FUNCTIONS
 
-COMPILER:=g++-posix
+COMPILER:=x86_64-w64-mingw32-g++-posix
 
 # Absolute root to project folder
 root:=.
@@ -14,14 +14,12 @@ SRC:=src
 BUILD:=Debug
 NAME:=login_prog
 
-
 SRC_FOLDER:=$(root)/$(SRC)# Source folder absolute path
 BIN_FOLDER:=$(root)/$(BIN)# Binary folder absolute path
 
-
 # Linker Flags
 LFlags:=\
--LC:\.dev\MinGW-w64\posix\bin -Wl,-Bstatic -latomic -lgomp -lquadmath -lssp -lstdc++ -lwinpthread
+-static -Os
 
 # Compiler Flags
 CFlags:=\
@@ -56,7 +54,7 @@ $(foreach src,$(SOURCE_FILES),$(eval $(call Compile_Source,$(src))))
 
 # Run the output
 run: $(ODIR)/$(NAME).exe
-	@$(ODIR)/$(NAME).exe
+	-$(ODIR)/$(NAME).exe
 	
 
 # Clean all object files that have no equivalent source file
@@ -65,5 +63,10 @@ define RM_LIST
 $(foreach file,$(1),$(MAKE) clean REMOVE_TARGET=$(file))
 endef
 
+ifneq ($(__Dirty_Objects),)
 clean: $(REMOVE_TARGET)
 	rm $(__Dirty_Objects)
+else
+clean:
+	@echo "Clean object directory."
+endif

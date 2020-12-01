@@ -1,28 +1,21 @@
 #include "main.hpp"
 
-static bool ent = false;
-static long counter = 0;
+using std::string;
+using std::unordered_map;
 
-
-void w1() {
-	
-	while (true) 
-		if (!ent) {
-		printf("%i\n", counter);
-		counter++;
-	} else return;
-	
-}
+void f() {printf("f");}
 
 int main() {
 	
-	std::thread worker1(w1);
+	std::thread m(f);
+	std::thread m2(f);
+	
 	printf("%s", get_input().c_str());
-	std::this_thread::sleep_for(std::chrono::seconds(5));
-	ent = true;
 	
-	worker1.join();
+	m.join();
+	m2.join();
 	
+	std::this_thread::sleep_for(std::chrono::seconds(2));
 	
 	return 0;
 }

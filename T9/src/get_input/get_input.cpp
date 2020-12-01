@@ -1,8 +1,9 @@
 #include "get_input.hpp"
 
-std::string get_input() {
-	
-	
-	
-	return "get_input()";
+using std::string;
+
+string get_input() {
+	string output;
+	std::getline(std::cin, output, '\n');
+	return output;
 }
