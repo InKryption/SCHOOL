@@ -19,7 +19,7 @@ BIN_FOLDER:=$(root)/$(BIN)# Binary folder absolute path
 
 # Linker Flags
 LFlags:=\
--static -Os
+-static
 
 # Compiler Flags
 CFlags:=\
