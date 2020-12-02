@@ -1,18 +1,13 @@
 #include "split_tokens.hpp"
 
-using std::vector;
+using std::pair;
 using std::string;
 
-vector<string> ink::split_tokens(string input) {
-	vector<string> output;
+pair<string, string> ink::split_tokens(string input) {
+	pair<string, string> output;
 	
-	bool is_space;
-	for (size_t s = 0, e = 0; e <= input.length(); e++) {
-		if (e - s > 0)
-		if (isspace(input[e]) || e == input.length()) {
-			output.push_back(input.substr(s, e - s));
-			s = e + 1;
-		}
-	}
+	output.first = input.substr(0, input.find_first_of(" \n\t"));
+	output.second = input.substr(input.find_first_of(" \n\t"));
+	
 	return output;
 }

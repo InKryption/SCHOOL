@@ -4,7 +4,7 @@
 #include "common.hpp"
 
 namespace ink {
-	std::vector<std::string> split_tokens(std::string);
+	std::pair<std::string, std::string> split_tokens(std::string);
 }
 
 #endif

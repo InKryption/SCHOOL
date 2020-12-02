@@ -1,4 +1,5 @@
 #include "common.hpp"
 #include "parse/prompt_input.hpp"
 #include "parse/split_tokens.hpp"
-#include "cmd_struct/cmd.hpp"
+#include "helper/trim.hpp"
+#include "cmd_interp/cmd_interp.hpp"
