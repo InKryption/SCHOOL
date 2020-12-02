@@ -19,7 +19,7 @@ BIN_FOLDER:=$(root)/$(BIN)# Binary folder absolute path
 
 # Linker Flags
 LFlags:=\
--static -Os
+-static
 
 # Compiler Flags
 CFlags:=\
@@ -48,6 +48,7 @@ $(OBJDIR)/$(notdir $(firstword $(subst ., ,$(1)))).o: $(1)
 	$(COMPILER) -c $(1) -o $(OBJDIR)/$(notdir $(firstword $(subst ., ,$(1)))).o $(CFlags)
 endef
 $(foreach src,$(SOURCE_FILES),$(eval $(call Compile_Source,$(src))))
+
 
 
 .PHONY: run clean
