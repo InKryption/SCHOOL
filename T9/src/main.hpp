@@ -1,5 +1,7 @@
 #include "common.hpp"
-#include "parse/prompt_input.hpp"
-#include "parse/split_tokens.hpp"
+
+#include "helper/open_file.hpp"
+#include "helper/get_line.hpp"
 #include "helper/trim.hpp"
-#include "cmd_interp/cmd_interp.hpp"
+#include "helper/lowercase.hpp"
+#include "helper/list_cmds.hpp"

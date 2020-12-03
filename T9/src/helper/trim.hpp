@@ -1,13 +1,13 @@
-#ifndef __T9_ACTIVITY__TRIM_FUNCTION__HEADER_FILE_
-#define __T9_ACTIVITY__TRIM_FUNCTION__HEADER_FILE_
+#ifndef __T9_ACTIVITY__HELPER_FUNCTION_TRIM__HEADER_FILE_
+#define __T9_ACTIVITY__HELPER_FUNCTION_TRIM__HEADER_FILE_
 
 #include "common.hpp"
 
-namespace ink {
+namespace ink::helper {
 	
-	void trim(std::string&);
-	std::string trim(const std::string&);
-	std::string trim(std::string&&);
+	void trim(std::string& str_ref);
+	std::string trim(const std::string& str);
+	std::string trim(std::string&& str);
 	
 }
 
