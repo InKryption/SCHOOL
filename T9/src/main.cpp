@@ -13,6 +13,16 @@ using ink::Context;
 int main() {
 	system("mkdir LOGS"); // Ensure that the LOGS directory exists
 	
+	Command exit(
+		//{},
+		[](PRIMITIVE_PROC* ths) {
+			
+			printf("%i\n", ths->takes_ownership());
+			
+		}
+	);
+	
+	exit.run();
 	
 	
 	return 0;

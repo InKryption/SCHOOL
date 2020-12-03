@@ -9,6 +9,7 @@ namespace ink {
 	void Context::
 	set_next(std::string next_key)
 	{
+		if (this->branches.find(next_key) == branches.end()) return;
 		this->_next = next_key;
 	}
 	
