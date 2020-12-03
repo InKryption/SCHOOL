@@ -1,3 +1,5 @@
+.ONESHELL:
+
 # start FUNCTIONS
 define All_Files_Inside
 $(foreach file,$(wildcard $(1)/*),$(if $(wildcard $(file)/*),$(call All_Files_Inside,$(file)),$(file)))
@@ -34,8 +36,6 @@ OBJDIR:=$(ODIR)/obj
 SOURCE_FILES:=$(filter %.cpp,$(call All_Files_Inside,$(SRC_FOLDER)))
 OBJECT_FILES:=$(foreach src,$(SOURCE_FILES),$(OBJDIR)/$(firstword $(subst ., ,$(notdir $(src)))).o)
 
-
-
 $(ODIR)/$(NAME).exe: $(OBJECT_FILES)
 	@echo ""
 	$(COMPILER) $(OBJECT_FILES) -o $(ODIR)/$(NAME).exe $(LFlags)
@@ -44,30 +44,27 @@ $(ODIR)/$(NAME).exe: $(OBJECT_FILES)
 
 # Do this in the foreach, so that every source file in the list created before goes through this process automatically.
 define Compile_Source
-$(OBJDIR)/$(notdir $(firstword $(subst ., ,$(1)))).o: $(1)
+$(OBJDIR)/$(notdir $(firstword $(subst ., ,$(1)))).o: $(1) $(filter %$(notdir $(firstword $(subst ., ,$(1)))).hpp,$(call All_Files_Inside,$(SRC_FOLDER)))
 	$(COMPILER) -c $(1) -o $(OBJDIR)/$(notdir $(firstword $(subst ., ,$(1)))).o $(CFlags)
 endef
 $(foreach src,$(SOURCE_FILES),$(eval $(call Compile_Source,$(src))))
 
-
-
-.PHONY: run clean
+.PHONY: clean dir run
 
 # Run the output
 run: $(ODIR)/$(NAME).exe
 	-$(ODIR)/$(NAME).exe
 	
+dir:
+ifeq ($(wildcard $(BIN_FOLDER)/*),)
+	-mkdir -p $(OBJDIR)
+else ifeq ($(wildcard $(ODIR)/*),)
+	-mkdir -p  $(OBJDIR)
+endif
 
 # Clean all object files that have no equivalent source file
-__Dirty_Objects=$(foreach pdo,$(wildcard $(OBJDIR)/*),$(if $(filter $(pdo),$(OBJECT_FILES)),,$(pdo)))
-define RM_LIST
-$(foreach file,$(1),$(MAKE) clean REMOVE_TARGET=$(file))
-endef
+Dirty_Objects=$(foreach pdo,$(wildcard $(OBJDIR)/*),$(if $(filter $(pdo),$(OBJECT_FILES)),,$(pdo)))
 
-ifneq ($(__Dirty_Objects),)
-clean: $(REMOVE_TARGET)
-	rm $(__Dirty_Objects)
-else
 clean:
-	@echo "Clean object directory."
-endif
+	@rm $(Dirty_Objects)
+	@echo $(Dirty_Objects)
