@@ -20,8 +20,7 @@ namespace ink {
 		
 		protected:
 		proc op;
-		PRIMITIVE_PROC(const proc& function_ptr)	: op( function_ptr ) {}
-		PRIMITIVE_PROC(proc&& function_ptr)			: op( std::move(function_ptr) ) {}
+		PRIMITIVE_PROC(proc function_ptr)	: op( function_ptr ) {}
 	};
 	
 }
@@ -36,11 +35,11 @@ namespace ink {
 		
 		// Constructors
 		
-		Command(const proc& function_ptr)
-		: PRIMITIVE_PROC( function_ptr ) {}
+		Command()
+		: PRIMITIVE_PROC( NULL ) {}
 		
-		Command(proc&& function_ptr)
-		: PRIMITIVE_PROC( std::move(function_ptr) ) {}
+		Command(proc function_ptr)
+		: PRIMITIVE_PROC( function_ptr ) {}
 	};
 	
 	
@@ -50,10 +49,12 @@ namespace ink {
 		
 		// Constructors
 		
-		Context(const std::unordered_map<std::string, PRIMITIVE_PROC*>& branches, const PRIMITIVE_PROC::proc& function_ptr);
-		Context(std::unordered_map<std::string,PRIMITIVE_PROC*>&& branches, PRIMITIVE_PROC::proc&& function_ptr);
-		Context(const std::unordered_map<std::string,PRIMITIVE_PROC*>& branches, PRIMITIVE_PROC::proc&& function_ptr);
-		Context(std::unordered_map<std::string,PRIMITIVE_PROC*>&& branches, const PRIMITIVE_PROC::proc& function_ptr);
+		Context():
+			branches({}),
+			PRIMITIVE_PROC(NULL)
+		{}
+		Context(const std::unordered_map<std::string, PRIMITIVE_PROC*>& branches, PRIMITIVE_PROC::proc function_ptr);
+		Context(std::unordered_map<std::string,PRIMITIVE_PROC*>&& branches, PRIMITIVE_PROC::proc function_ptr);
 		
 		// Set key for the next basic process/context to take place
 		void set_next(std::string next_key);

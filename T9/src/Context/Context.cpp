@@ -1,6 +1,6 @@
 #include "Context.hpp"
 
-using proc = ink::PRIMITIVE_PROC::proc;
+typedef ink::PRIMITIVE_PROC::proc proc;
 using std::string;
 using BPP_HASH = std::unordered_map<std::string , ink::PRIMITIVE_PROC* >;
 
@@ -9,8 +9,12 @@ namespace ink {
 	void Context::
 	set_next(std::string next_key)
 	{
-		if (this->branches.find(next_key) == branches.end()) return;
+		if (this->branches.find(next_key) == branches.end()) {
+			printf("Specifed command does not exist in the current context.\n");
+			return;
+		}
 		this->_next = next_key;
+		
 	}
 	
 	
@@ -18,7 +22,9 @@ namespace ink {
 	void Context::
 	next()
 	{
-		this->branches.at(_next)->run();
+		if ( this->branches[_next]->takes_ownership() )
+		static_cast<Context*>(this->branches[_next])->init(this);
+		this->branches[_next]->run();
 	}
 	
 	
@@ -36,7 +42,7 @@ namespace ink {
 	
 	
 	Context::
-	Context(const BPP_HASH& branches, const proc& function_ptr):
+	Context(const BPP_HASH& branches, proc function_ptr):
 		PRIMITIVE_PROC	( function_ptr ),
 		branches		( branches )
 	{}
@@ -44,24 +50,8 @@ namespace ink {
 	
 	
 	Context::
-	Context(BPP_HASH&& branches, proc&& function_ptr):
+	Context(BPP_HASH&& branches, proc function_ptr):
 		PRIMITIVE_PROC	( std::move(function_ptr) ),
-		branches		( std::move(branches) )
-	{}
-	
-	
-	
-	Context::
-	Context(const BPP_HASH& branches, proc&& function_ptr):
-		PRIMITIVE_PROC	( std::move(function_ptr) ),
-		branches		( branches )
-	{}
-	
-	
-	
-	Context::
-	Context(BPP_HASH&& branches, const proc& function_ptr):
-		PRIMITIVE_PROC	( function_ptr ),
 		branches		( std::move(branches) )
 	{}
 	

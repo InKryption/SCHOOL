@@ -5,5 +5,6 @@
 #include "helper/trim.hpp"
 #include "helper/lowercase.hpp"
 #include "helper/list_cmds.hpp"
+#include "helper/path_exists.hpp"
 
 #include "Context/Context.hpp"
