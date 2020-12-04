@@ -27,6 +27,7 @@ LFlags:=\
 CFlags:=\
 -I$(SRC_FOLDER) \
 -std=gnu++17 \
+-g -Og\
 
 # Output & Object Output directories
 ODIR:=$(BIN_FOLDER)/$(BUILD)

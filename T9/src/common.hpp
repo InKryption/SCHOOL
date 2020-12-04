@@ -5,6 +5,10 @@
 #include <vector>
 #include <unordered_map>
 
+#include <fstream>
+#include <iostream>
+
 #include <sys/stat.h>
+#include <random>
 
 #endif

@@ -1,10 +1,9 @@
 #include "common.hpp"
 
-#include "helper/open_file.hpp"
-#include "helper/get_line.hpp"
+#include "helper/get_input.hpp"
 #include "helper/trim.hpp"
 #include "helper/lowercase.hpp"
-#include "helper/list_cmds.hpp"
 #include "helper/path_exists.hpp"
+#include "helper/split_char.hpp"
 
-#include "Context/Context.hpp"
+#include "user/User.hpp"
