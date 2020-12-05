@@ -2,7 +2,6 @@
 #define __T9_ACTIVITY__HELPER_FUNCTION__SPLIT_BY_CHAR__HEADER_FILE_
 
 #include "common.hpp"
-#include "helper/trim.hpp"
 
 namespace ink::helper {
 	

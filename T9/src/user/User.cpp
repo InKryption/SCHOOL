@@ -4,60 +4,45 @@ using std::string;
 
 namespace ink {
 	
-	User::User(const string& USER_LINE_STRING)  {
+	// Constructors
+	
+	User::User(const std::string& name, const std::string& password)
+		: name(name), password(password), info("")
+	{}
+	
+	User::User(const std::string& user_line_string) {
 		
-		size_t START1 = USER_LINE_STRING.find_first_of("{") + 1;
-		size_t END1 = USER_LINE_STRING.find_first_of('}', START1);
+		size_t
+		start1 = user_line_string.find_first_of('{') + 1,
+		end1 = user_line_string.find_first_of('}', start1 + 1),
+		start2 = user_line_string.find_first_of('{', end1 + 1) + 1,
+		end2 = user_line_string.find_first_of('}', start2 + 1),
+		start3 = user_line_string.find_first_of('{', end2 + 1) + 1,
+		end3 = user_line_string.find_first_of('}', start3 + 1);
 		
-		size_t START2 = USER_LINE_STRING.find_first_of('{', END1) + 1;
-		size_t END2 = USER_LINE_STRING.find_first_of('}', START2);
-		
-		size_t START3 = USER_LINE_STRING.find_first_of('{', END2) + 1;
-		size_t END3 = USER_LINE_STRING.find_first_of('}', START3);
-		
-		string
-		_name, _password, _info;
-		
-		for (auto str : ink::helper::split_char(' ', USER_LINE_STRING.substr(START1, END1-START1)))
-		_name.push_back((char)std::stoi(str));
-		
-		for (auto str : ink::helper::split_char(' ', USER_LINE_STRING.substr(START2, END2-START2)))
-		_password.push_back((char)std::stoi(str));
-		
-		for (auto str : ink::helper::split_char(' ', USER_LINE_STRING.substr(START3, END3-START3)))
-		_info.push_back((char)std::stoi(str));
-		
-		
-		name = _name;
-		password = _password;
-		info = _info;
+		name = ink::char_decrypt(user_line_string.substr(start1, end1-start1));
+		password = ink::char_decrypt(user_line_string.substr(start2, end2-start2));
+		info = ink::char_decrypt(user_line_string.substr(start3, end3-start3));
 		
 	}
 	
-	string User::DATA()  {
-		std::string _name, _password, _info;
-		
-		for (auto c : name)
-		_name.append( std::to_string((int)(c)) + " " );
-		_name.pop_back();
-		
-		for (auto c : password)
-		_password.append( std::to_string((int)(c)) + " " );
-		_password.pop_back();
-		
-		for (auto c : info)
-		_info.append( std::to_string((int)(c)) + " " );
-		_info.pop_back();
-		
-		return '{' + _name + '}' + '{' + _password + '}' + '{' + _info + '}';
+	User::operator std::__cxx11::string() {
+		return
+			'{'+	ink::char_encrypt(name)		+'}'
+			+
+			'{'+	ink::char_encrypt(password)	+'}'
+			+
+			'{'+	ink::char_encrypt(info)		+'}'
+		;
 	}
 	
-	void User::LOGGED_IN_UI() {
-		while (true) {
-			
-			
-			
-		}
+	
+	// Getters
+	
+	std::string User::get_name() {
+		return name;
 	}
+	
+	
 	
 }
