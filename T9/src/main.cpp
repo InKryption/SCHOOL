@@ -61,6 +61,15 @@ int main() {
 	printf("Closing session. Logging information. Goodbye. . .\n");
 	
 	/* CLEAN "users.txt" FILE. OVERWRITE IT USING NEW INFO IN THE "UserHash" OBJECT. */
+	std::fstream fHandle;
+	fHandle.open("LOGS/users.txt");
+	for (auto p : UserHash) {
+		for (auto c : p.second->DATA())
+			fHandle.put(c);
+		fHandle.put('\n');
+	}
+	
+	fHandle.close();
 	
 	return 0;
 }
@@ -102,7 +111,7 @@ bool Login(unordered_map<string, ink::User*>& hash) {
 		password = ink::helper::lowercase(ink::helper::trim(ink::helper::get_input()));
 		if (hash[username]->log_in(password)) {
 			hash[username]->LOGGED_IN_UI();
-			return true; // debugging purposes
+			return true;
 		} else counter++;
 		
 		if (counter == 3) {

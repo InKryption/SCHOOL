@@ -52,6 +52,12 @@ namespace ink {
 		return '{' + _name + '}' + '{' + _password + '}' + '{' + _info + '}';
 	}
 	
-	
+	void User::LOGGED_IN_UI() {
+		while (true) {
+			
+			
+			
+		}
+	}
 	
 }

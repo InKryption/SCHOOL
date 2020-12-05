@@ -23,10 +23,6 @@ namespace ink {
 		
 		private:
 		
-		std::string parse_info() {
-			
-		}
-		
 		std::string name;
 		std::string info;
 		std::string password;
