@@ -40,14 +40,28 @@ namespace ink {
 		
 		#pragma endregion
 		
-		// Two-way conversion/construction between const char*, and std::string
+		// Conversion to string and null-terminated string
 		
+		#pragma region CONSTRUCTORS
+		
+		string(const char* __s) : std::string(__s) {}
 		string() : std::string() {}
-		string(const literal& str) : std::string(str) {}
-		operator literal() { return c_str(); }
+		string(const std::allocator<char>& __a) : std::string(__a) {}
+		string(std::string&& __str) : std::string(__str) {}
+		string(const std::string& __str) : std::string(__str) {}
+		string(const char* __s, const std::allocator<char>& __a) : std::string(__s, __a) {}
+		string(std::initializer_list<char> __l, const std::allocator<char>& __a) : std::string(__l, __a) {}
+		string(std::string&& __str, const std::allocator<char>& __a) : std::string(__str, __a) {}
+		string(const std::string& __str, const std::allocator<char>& __a) : std::string(__str, __a) {}
 		
-		string(const std::string& str) : std::string(str) {}
-		string(std::string&& str) : std::string(std::move(str)) {}
+		template<typename _InputIterator>
+		string(_InputIterator __beg, _InputIterator __end, const std::allocator<char>& __a) : std::string(__beg, __end, __a) {}
+		
+		string(std::size_t __n, char __c, const std::allocator<char>& __a) : std::string(__n, __c, __a) {}
+		string(const char* __s, std::size_t __n, const std::allocator<char>& __a) : std::string(__s, __n, __a) {}
+		string(const std::string& __str, std::size_t __pos, std::size_t __n) : std::string(__str, __pos, __n) {}
+		string(const std::__cxx11::string& __str, std::size_t __pos, std::size_t __n, const std::allocator<char>& __a) : std::string(__str, __pos, __n) {}
+		#pragma endregion
 	};
 	
 }

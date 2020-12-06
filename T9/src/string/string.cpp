@@ -44,12 +44,4 @@ namespace ink {
 	}
 	#pragma endregion
 	
-	
-	
-	// string string::as_lowercase() const {
-	// 	string buff;
-	// 	for (auto c : *this) buff.push_back(std::tolower(c));
-	// 	return buff;
-	// }
-	
 }

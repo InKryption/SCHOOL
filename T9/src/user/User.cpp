@@ -1,16 +1,16 @@
 #include "User.hpp"
 
-using std::string;
-
 namespace ink {
 	
-	// Constructors
+	#pragma region User
 	
-	User::User(const std::string& name, const std::string& password)
+	#pragma region Constructors
+	
+	UserHash::User::User(const string& name, const string& password)
 		: name(name), password(password), info("")
 	{}
 	
-	User::User(const std::string& user_line_string) {
+	UserHash::User::User(const string& user_line_string) {
 		
 		size_t
 		start1 = user_line_string.find_first_of('{') + 1,
@@ -20,29 +20,47 @@ namespace ink {
 		start3 = user_line_string.find_first_of('{', end2 + 1) + 1,
 		end3 = user_line_string.find_first_of('}', start3 + 1);
 		
-		name = ink::char_decrypt(user_line_string.substr(start1, end1-start1));
-		password = ink::char_decrypt(user_line_string.substr(start2, end2-start2));
-		info = ink::char_decrypt(user_line_string.substr(start3, end3-start3));
+		name = char_decrypt(user_line_string.substr(start1, end1-start1));
+		password = char_decrypt(user_line_string.substr(start2, end2-start2));
+		info = char_decrypt(user_line_string.substr(start3, end3-start3));
 		
 	}
 	
-	User::operator std::__cxx11::string() {
+	UserHash::User::operator string() {
 		return
-			'{'+	ink::char_encrypt(name)		+'}'
+			'{'+	char_encrypt(name)		+'}'
 			+
-			'{'+	ink::char_encrypt(password)	+'}'
+			'{'+	char_encrypt(password)	+'}'
 			+
-			'{'+	ink::char_encrypt(info)		+'}'
+			'{'+	char_encrypt(info)		+'}'
 		;
 	}
 	
+	#pragma endregion
 	
 	// Getters
 	
-	std::string User::get_name() {
-		return name;
+	string UserHash::User::get_name() { return name; }
+	
+	#pragma endregion
+	
+	#pragma region UserHash
+	
+	bool UserHash::register_user(string username, string password) {
+		bool flag;
+		if (flag = (__inner.find(username) != __inner.end()))
+		__inner.insert(std::pair<std::string, User>(username, User(username, password)));
+		
+		return flag;
+	}
+	
+	void UserHash::parse_user(const string& str) {
+		auto importedUser = User(str);
+		__inner.insert(std::pair<std::string, User>(importedUser.get_name(), importedUser));
 	}
 	
 	
+	
+	#pragma endregion
 	
 }

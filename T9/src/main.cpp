@@ -7,7 +7,12 @@ int main() {
 	// Ensure that the LOGS directory exists
 	if (!ink::helper::path_exists("LOGS")) system("mkdir LOGS");
 	
-	ink::string test = "	  \n tE  st 	\n";
+	string f = "d";
+	string g = "ie";
+	
+	auto n = ink::char_encrypt(f);
+	
+	printf("%s", n.c_str());
 	
 	return 0;
 }
