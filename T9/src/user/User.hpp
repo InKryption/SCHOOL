@@ -22,7 +22,7 @@ namespace ink {
 				name(username),
 				container_ref(container_ref),
 				password(password),
-				info(info)
+				info( (ink::string(info).trim_copy() == "\\\\#") ? "" : info )
 			{}
 			
 			UserHash* container_ref;
@@ -37,7 +37,7 @@ namespace ink {
 						\r\tread - Read info.\n\
 						\r\tedit - Edit info.\n\
 						\r\tclear - (CAUTION) Erase all info logged to this account.\n\
-						\r\tDELETE - (CAUTION) Delete this account.\n"
+						\r\tunregister - (CAUTION) Delete this account.\n"
 				);
 				return true;
 			}
@@ -60,6 +60,8 @@ namespace ink {
 			
 			bool edit() {
 				
+				printf("Press ENTER twice to end editing.\n\n");
+				
 				int empty_count = 0;
 				string input;
 				while (empty_count < 2) {
@@ -70,17 +72,21 @@ namespace ink {
 				}
 				info.pop_back();
 				
+				printf("-= END OF EDIT =-\n");
 				return true;
 			}
 			
 			bool clear() {
-				bool erase_all = helper::Y_N_Prompt
-				("WARNING: You are about to erase all logged information from this account. Are you sure you want to do this? (Y/N)\n");
+				bool erase_all = true;
+				if (info.find_first_of('\n') != info.find_last_of('\n'))
+				erase_all = 
+				helper::Y_N_Prompt("WARNING: You are about to erase all logged information from this account. Are you sure you want to do this? (Y/N)\n");
+				
 				if (erase_all) this->info.clear();
 				return true;
 			}
 			
-			bool UNREGISTER() {
+			bool unregister() {
 				bool unregister = ink::helper::Y_N_Prompt
 				("Are you SURE you want to UNREGISTER this account? (Y/N)\n");
 				
@@ -96,11 +102,23 @@ namespace ink {
 				{"read", read},
 				{"edit", edit},
 				{"clear", clear},
-				{"UNREGISTER", UNREGISTER}
+				{"unregister", unregister}
 			};
 			
 			public:
 			User() {}
+			std::string as_data() {
+				std::string output;
+				
+				if (info.empty()) info = "\\\\#";
+				
+				output.append('{' + ink::char_encrypt(name) + '}');
+				output.append('{' + ink::char_encrypt(password) + '}');
+				output.append('{' + ink::char_encrypt(info) + '}');
+				
+				return output;
+			}
+			
 		};
 		friend class User;
 		
@@ -112,16 +130,27 @@ namespace ink {
 		// Return false on failure to import user, true otherwise
 		bool import_user(const string& user_information_line);
 		
-		// Return false on failure to register user, true otherwise
-		bool register_user(const string& name, const string& password);
+		// Return false on failure to register, true otherwise
+		bool register_user();
 		
-		// Log into specified account
-		bool log_in(const string& user);
+		// Return false on failure to log in, true otherwise.
+		bool log_in();
 		
 		void list_users() {
 			printf("Users:\n");
 			for (auto usr : __inner)
 			printf("\t%s\n", usr.first.c_str());
+		}
+		
+		std::string DATA() {
+			std::string output;
+			
+			for (auto p : __inner) {
+				output.append(p.second.as_data());
+				output.push_back('\n');
+			}
+			
+			return output;
 		}
 		
 		private:

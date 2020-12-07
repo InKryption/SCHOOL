@@ -13,6 +13,7 @@ login(ink::UserHash&),
 Register(ink::UserHash&);
 
 int main() {
+	
 	// Ensure that the LOGS directory exists
 	if (!ink::helper::path_exists("LOGS")) system("mkdir LOGS");
 	
@@ -49,10 +50,16 @@ int main() {
 		
 		if (CMD.find(input_buff) != CMD.end() )
 		running = CMD.at(input_buff)(uHash);
+		else if (input_buff.empty()) continue;
 		else printf("No such command exists in the current context.\n");
 		
 	}
 	
+	std::fstream fs;
+	fs.open(USER_FILE_PATH, std::ofstream::out | std::ofstream::trunc);
+	auto DATA = uHash.DATA();
+	fs.write(DATA.c_str(), DATA.length());
+	fs.close();
 	return 0;
 }
 
@@ -80,15 +87,18 @@ bool list(ink::UserHash& uHash) {
 }
 
 bool login(ink::UserHash& uHash) {
-	
-	
-	
+	if (!uHash.log_in()) printf("Too many failed attempts.\n");
 	return true;
 }
 
 bool Register(ink::UserHash& uHash) {
-	
-	
-	
+	if (!uHash.register_user()) printf("Too many failed attempts.\n");
 	return true;
 }
+
+
+/*
+{115 116 101 116}{77}{80}
+{116 101 115 116}{76}{81}
+{116 115 101 116}{77}{80}
+*/

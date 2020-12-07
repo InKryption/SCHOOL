@@ -30,22 +30,86 @@ namespace ink {
 		return true;
 	}
 	
-	bool UserHash::register_user(const string& name, const string& password) {
-		if ( __inner.find(name) != __inner.end() ) return false;
-		__inner.emplace(name, User(this, name, password, ""));
+	bool UserHash::register_user() {
+		
+		string
+			name_buff,
+			passwd_buff
+		;
+		short fail_count = 0;
+		while (true) {
+			printf("Username:\n");
+			name_buff = ink::helper::get_input();
+			
+			if (__inner.find(name_buff) != __inner.end()) {
+				printf("Another user already has that name. Please choose another one.\n\n");
+				if (fail_count++ == 3) return false;
+			}
+			else break;
+		}
+		
+		fail_count = 0;
+		while (true) {
+			printf("Password:\n");
+			passwd_buff = ink::helper::get_input();
+			if (system("cls") != 0) system("clear");
+			printf("Confirm password:\n");
+			if ( passwd_buff != ink::helper::get_input() || passwd_buff.empty() ) {
+				printf("Passwords do not match.\n\n");
+				if (fail_count++ == 3) return false;
+			}
+			else break;
+		}
+		
+		__inner.emplace(name_buff, User(this, name_buff, passwd_buff, ""));
 		return true;
 	}
 	
-	bool UserHash::log_in(const string& user) {
-		if ( __inner.find(user) == __inner.end() ) return false;
+	bool UserHash::log_in() {
+		list_users(); printf("\n");
 		
-		auto& USER = __inner[user];
-		bool logged_in = true;
+		string
+			username_buff,
+			passwd_buff
+		;
+		
+		short fail_count = 0;
+		while (true) {
+			printf("Username:\n");
+			username_buff = ink::helper::get_input();
+			
+			if (__inner.find(username_buff) == __inner.end()) {
+				printf("No user with specified name. Check above listing.\n");
+				if (++fail_count == 3) return false;
+			} else break;
+		}
+		
+		auto& USER = __inner[username_buff];
+		
+		fail_count = 0;
+		while (true) {
+			printf("Password:\n");
+			passwd_buff = ink::helper::get_input();
+			if (USER.password != passwd_buff) {
+				printf("Incorrect password.\n");
+				if (++fail_count == 3) return false;
+			} else break;
+		}
+		
+		printf("Type 'help' to see commands.\n\n\n");
 		
 		string input_buff;
+		bool logged_in = true;
 		while (logged_in) {
 			input_buff = string(ink::helper::get_input());
 			input_buff.lowercase();
+			
+			if ( input_buff.empty() ) continue;
+			else if ( USER.CMD.find(input_buff) == USER.CMD.end() ) {
+				printf("No such command exists in the current context.\n");
+				continue;
+			}
+			
 			logged_in = (USER.*USER.CMD[input_buff])();
 		}
 		
