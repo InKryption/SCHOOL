@@ -4,7 +4,7 @@ using std::string;
 using std::vector;
 
 namespace ink::helper {
-		
+	
 	vector<string> split_char(char chr, string str) {
 		vector<string> output;
 		size_t 
@@ -19,9 +19,8 @@ namespace ink::helper {
 			}
 			end++;
 		}
-		output.push_back(
-			str.substr(begin, end-begin)
-		);
+		string buff = str.substr(begin, end-begin);
+		if (!buff.empty()) output.push_back( buff );
 		
 		return output;
 	}
