@@ -13,7 +13,7 @@ root:=.
 
 BIN:=bin
 SRC:=src
-BUILD:=Debug
+BUILD:=Release
 NAME:=login_prog
 
 SRC_FOLDER:=$(root)/$(SRC)# Source folder absolute path
