@@ -26,8 +26,7 @@ LFlags:=\
 # Compiler Flags
 CFlags:=\
 -I$(SRC_FOLDER) \
--std=gnu++17 \
--g -Og\
+-std=gnu++17 -O3\
 
 # Output & Object Output directories
 ODIR:=$(BIN_FOLDER)/$(BUILD)
