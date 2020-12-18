@@ -1,2 +1,0 @@
-testing and setting up for when git deprecates in-url logins
-successfully pushed
